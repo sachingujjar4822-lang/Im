@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>प्रतिशत - Mock Test 1</title>
+<style>
+body{font-family:Arial, sans-serif; margin:0; padding:20px; background:#f4f6fa;}
+h1{text-align:center;}
+.top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+.timer{font-size:18px; color:#d9534f;}
+.card{background:#fff; padding:18px; margin:15px auto; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.08); max-width:900px;}
+.options label{display:block; margin:8px 0; cursor:pointer;}
+.nav{display:flex; justify-content:space-between; max-width:900px; margin:10px auto;}
+button{padding:10px 16px; background:#0b73ff; color:#fff; border:none; border-radius:8px; cursor:pointer;}
+button:hover{background:#0555be;}
+#result{font-size:18px; margin-top:16px; font-weight:bold; text-align:center;}
+</style>
+</head>
+<body>
+<h1>प्रतिशत - Mock Test 1</h1>
+<div class="top">
+  <div class="timer">⏳ शेष समय: <span id="time">35:00</span></div>
+</div>
+<div id="quiz"></div>
+<div class="nav">
+  <button id="prevBtn" onclick="prevQ()">⬅️ Previous</button>
+  <button id="nextBtn" onclick="nextQ()">Next ➡️</button>
+  <button id="submitBtn" style="display:none;" onclick="submitQuiz()">✅ Submit Test</button>
+</div>
+<div id="result"></div>
+
+<script>
+const questions = [
+  { q: "एक संख्या का 20% = 50 है। वह संख्या है?", opts: ["100","200","250","400"], ans:"b" },
+  { q: "480 का 25% कितना है?", opts: ["100","120","150","180"], ans:"b" },
+  { q: "यदि किसी वस्तु की कीमत 800 ₹ है और उस पर 10% की छूट मिलती है, तो विक्रय मूल्य क्या होगा?", opts: ["700","720","750","760"], ans:"b" },
+  { q: "एक छात्र ने परीक्षा में 600 अंक में से 420 अंक प्राप्त किए। उसका प्रतिशत कितना है?", opts: ["65%","68%","70%","72%"], ans:"c" },
+  { q: "किसी राशि का 40% = 260 है। राशि कितनी होगी?", opts: ["600","620","640","650"], ans:"a" },
+  { q: "200 का 12.5% कितना होगा?", opts: ["20","22","25","30"], ans:"c" },
+  { q: "किसी वस्तु पर 20% हानि होती है और वह 800 में बिकती है, तो क्रय मूल्य क्या होगा?", opts: ["900","950","1000","1100"], ans:"c" },
+  { q: "एक वस्तु को 15% लाभ पर 575 में बेचा गया। उसका क्रय मूल्य कितना है?", opts: ["450","475","500","520"], ans:"c" },
+  { q: "500 का 9% कितना है?", opts: ["40","45","50","55"], ans:"b" },
+  { q: "एक राशि का 3/5 भाग = 60 है। पूरी राशि कितनी है?", opts: ["80","90","100","120"], ans:"c" },
+  { q: "किसी छात्र ने 400 में से 280 अंक प्राप्त किए। उसका प्रतिशत कितना है?", opts: ["65%","68%","70%","72%"], ans:"c" },
+  { q: "1000 का 2.5% कितना होगा?", opts: ["20","25","30","40"], ans:"b" },
+  { q: "एक वस्तु 20% हानि पर 480 में बिकी। क्रय मूल्य क्या होगा?", opts: ["500","550","600","650"], ans:"c" },
+  { q: "यदि 120 का 25% = x है तो x का मान क्या होगा?", opts: ["25","30","35","40"], ans:"b" },
+  { q: "एक राशि का 75% = 225 है। राशि कितनी होगी?", opts: ["250","275","300","325"], ans:"c" },
+  { q: "किसी परीक्षा में 80% = 560 अंक है। कुल अंक कितने हैं?", opts: ["650","675","700","720"], ans:"c" },
+  { q: "एक वस्तु का विक्रय मूल्य 600 है और क्रय मूल्य 500 है। लाभ प्रतिशत क्या है?", opts: ["15%","18%","20%","25%"], ans:"c" },
+  { q: "एक वस्तु पर 10% छूट देने पर 450 में बेचा गया। अंकित मूल्य क्या होगा?", opts: ["480","490","500","520"], ans:"c" },
+  { q: "एक संख्या दूसरी संख्या की 150% है। दोनों का अनुपात क्या है?", opts: ["2:3","3:2","4:3","5:3"], ans:"b" },
+  { q: "किसी राशि का 60% = 180 है। पूरी राशि कितनी होगी?", opts: ["250","280","300","320"], ans:"c" },
+  { q: "एक विद्यार्थी ने 750 में से 600 अंक प्राप्त किए। प्रतिशत कितना होगा?", opts: ["75%","78%","80%","82%"], ans:"c" },
+  { q: "1200 का 8.5% कितना होगा?", opts: ["90","100","102","110"], ans:"c" },
+  { q: "500 का 0.2 कितना होगा?", opts: ["1","5","10","20"], ans:"d" },
+  { q: "एक संख्या का 40% दूसरी संख्या के 2/5 के बराबर है। दोनों में अनुपात क्या है?", opts: ["1:1","2:1","3:2","4:3"], ans:"a" },
+  { q: "किसी वस्तु को 15% हानि पर 1700 में बेचा गया। क्रय मूल्य क्या है?", opts: ["1800","1900","2000","2100"], ans:"c" }
+];
+
+let current = 0;
+let userAns = {};
+
+function render(){
+  const q = questions[current];
+  const optLetters = ['a','b','c','d'];
+  const container = document.getElementById('quiz');
+  const optionsHTML = q.opts.map((o,i)=>`
+    <label>
+      <input type="radio" name="q${current}" value="${optLetters[i]}"
+        ${userAns["q"+current]===optLetters[i]?"checked":""}>
+      ${o}
+    </label>`).join("");
+  container.innerHTML = `<div class="card">
+    <p><b>Q${current+1}.</b> ${q.q}</p>
+    <div class="options">${optionsHTML}</div>
+  </div>`;
+  document.getElementById('prevBtn').style.display = current===0 ? "none":"inline-block";
+  document.getElementById('nextBtn').style.display = current===questions.length-1 ? "none":"inline-block";
+  document.getElementById('submitBtn').style.display = current===questions.length-1 ? "inline-block":"none";
+}
+
+function saveAns(){
+  const sel = document.querySelector(`input[name="q${current}"]:checked`);
+  if(sel) userAns["q"+current] = sel.value;
+}
+
+function nextQ(){ saveAns(); if(current<questions.length-1){ current++; render(); } }
+function prevQ(){ saveAns(); if(current>0){ current--; render(); } }
+
+function submitQuiz(){
+  saveAns();
+  let score=0;
+  for(let i=0;i<questions.length;i++){
+    if(userAns["q"+i]===questions[i].ans) score++;
+  }
+  document.getElementById('result').innerHTML = 
+    `✅ आपने ${questions.length} में से ${score} प्रश्न सही किए।`;
+}
+
+// Timer 35 min
+let timeLeft = 2100;
+const timer = document.getElementById('time');
+function tick(){
+  let m = Math.floor(timeLeft/60), s = timeLeft%60;
+  timer.textContent = `${m}:${s<10?'0'+s:s}`;
+  if(timeLeft<=0){ clearInterval(tid); submitQuiz(); document.getElementById('result').innerHTML += '<br>⏰ समय समाप्त!'; }
+  timeLeft--;
+}
+const tid = setInterval(tick, 1000);
+
+render();
+</script>
+</body>
+</html>
