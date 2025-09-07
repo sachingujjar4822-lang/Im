@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📘 गणित अध्यायवार Mock Test</title>
+  <style>
+    :root{
+      --bg:#f5f7fb; --card:#ffffff; --text:#222; --muted:#666;
+      --brand:#0b73ff; --brand-dark:#0555be; --chip:#eef4ff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif; background:var(--bg); color:var(--text);}
+    header{position:sticky; top:0; z-index:5; background:#111; color:#fff; padding:14px 18px; text-align:center; font-size:20px; letter-spacing:.2px}
+    .wrap{max-width:1100px; margin:18px auto; padding:0 14px;}
+    h1.section{margin:26px 0 12px; font-size:22px; background:var(--brand); color:#fff; padding:10px 14px; border-radius:10px;}
+    .grid{display:grid; grid-template-columns:repeat(1,minmax(0,1fr)); gap:14px;}
+    @media (min-width:640px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+    .card{
+      background:var(--card); border-radius:12px; padding:16px; box-shadow:0 6px 20px rgba(0,0,0,.06);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .card h2{margin:0; font-size:18px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chips a{
+      display:inline-block; text-decoration:none; background:var(--brand); color:#fff;
+      padding:7px 11px; border-radius:8px; font-size:13px; transition:.2s;
+    }
+    .chips a:hover{background:var(--brand-dark)}
+    .slug{font-size:12px; color:var(--muted)}
+    footer{margin:28px 0 40px; text-align:center; color:#888; font-size:13px}
+  </style>
+</head>
+<body>
+  <header>📘 गणित अध्यायवार Mock Test</header>
+  <div class="wrap">
+    
+    <!-- Arithmetic -->
+    <h1 class="section">अंकगणित (Arithmetic)</h1>
+    <div id="arGrid" class="grid"></div>
+
+    <!-- Advance Math -->
+    <h1 class="section">उन्नत गणित (Advance Math)</h1>
+    <div id="adGrid" class="grid"></div>
+
+    <footer>© 2025 • Math Mock Test App • 10 Tests/Chapter • 35 min/Quiz</footer>
+  </div>
+
+  <script>
+    // हर chapter के लिए: title (Hindi + English) और slug (file prefix)
+    const arithmeticChapters = [
+      { title: "प्रतिशत (Percentage)", slug: "per" },
+      { title: "लाभ और हानि (Profit & Loss)", slug: "pl" },
+      { title: "छूट (Discount)", slug: "dis" },
+      { title: "साधारण ब्याज (Simple Interest)", slug: "si" },
+      { title: "चक्रवृद्धि ब्याज (Compound Interest)", slug: "ci" },
+      { title: "अनुपात एवं समानुपात (Ratio & Proportion)", slug: "rp" },
+      { title: "औसत (Average)", slug: "avg" },
+      { title: "समय और काम (Time & Work)", slug: "tw" },
+      { title: "पाइप और टंकी (Pipes & Cisterns)", slug: "pc" },
+      { title: "दूरी और समय (Distance & Time)", slug: "dt" },
+      { title: "नाव और धारा (Boats & Streams)", slug: "boat" },
+      { title: "ल.स.प. एवं म.स.प. (LCM & HCF)", slug: "lcm" },
+      { title: "साझेदारी (Partnership)", slug: "part" },
+      { title: "मिश्रण एवं आरोपण (Mixture & Alligation)", slug: "mix" },
+    ];
+
+    const advanceChapters = [
+      { title: "संख्या पद्धति (Number System)", slug: "num" },
+      { title: "बीजगणित (Algebra)", slug: "alg" },
+      { title: "ज्यामिति (Geometry)", slug: "geo" },
+      { title: "त्रिकोणमिति (Trigonometry)", slug: "tri" },
+      { title: "क्षेत्रमिति (Mensuration)", slug: "men" },
+      { title: "निर्देशांक ज्यामिति (Coordinate Geometry)", slug: "coor" },
+      { title: "सांख्यिकी (Statistics)", slug: "stat" },
+      { title: "प्रायिकता (Probability)", slug: "prob" },
+      { title: "क्रमचय एवं संचय (Permutation & Combination)", slug: "pnc" },
+      { title: "समुच्चय (Set Theory)", slug: "set" },
+    ];
+
+    // हर chapter-card में 10 mock test links बनेंगे: slug1.html ... slug10.html
+    function makeCard({title, slug}) {
+      const card = document.createElement("div");
+      card.className = "card";
+      const h2 = document.createElement("h2");
+      h2.textContent = title;
+      const slugTag = document.createElement("div");
+      slugTag.className = "slug";
+      slugTag.textContent = `फ़ाइल प्रीफ़िक्स: ${slug} → (${slug}1.html ... ${slug}10.html)`;
+      const chips = document.createElement("div");
+      chips.className = "chips";
+      for (let i = 1; i <= 10; i++) {
+        const a = document.createElement("a");
+        a.href = `${slug}${i}.html`;
+        a.textContent = `Mock Test ${i}`;
+        chips.appendChild(a);
+      }
+      card.append(h2, slugTag, chips);
+      return card;
+    }
+
+    const arGrid = document.getElementById("arGrid");
+    arithmeticChapters.forEach(ch => arGrid.appendChild(makeCard(ch)));
+
+    const adGrid = document.getElementById("adGrid");
+    advanceChapters.forEach(ch => adGrid.appendChild(makeCard(ch)));
+  </script>
+</body>
+</html>
